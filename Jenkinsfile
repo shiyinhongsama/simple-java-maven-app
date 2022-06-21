@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'maven:3.6.3-openjdk-16-slim'
-      args '-v /root/.m2:/root/.m2'
+      args '-v /home/shiyinhong/.m2:/root/.m2'
     }
 
   }
@@ -12,6 +12,15 @@ pipeline {
         sh 'mvn -B -DskipTests clean package'
       }
     }
-
+    stage('Test') {
+        steps {
+            sh 'mvn test'
+        }
+        post {
+            always {
+                junit 'target/surefire-reports/*.xml'
+            }
+        }
+    }
   }
 }
